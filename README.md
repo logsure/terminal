@@ -9,7 +9,17 @@ in Rust, talking to a [LogSure server](https://github.com/logsure/server) throug
 
 ## Install
 
-You need Rust 1.88 or newer.
+With [Homebrew](https://brew.sh) (macOS and Linux), from this repository's own tap:
+
+```bash
+brew tap logsure/terminal https://github.com/logsure/terminal
+brew install logsure
+```
+
+It builds from source, so the first install takes a few minutes. `brew upgrade logsure` picks up new releases;
+`brew install --HEAD logsure` builds the latest `main`.
+
+With Cargo (Rust 1.88 or newer):
 
 ```bash
 cargo install --git https://github.com/logsure/terminal
@@ -112,6 +122,11 @@ cargo fmt --check
 The API client is tested against answers copied from a real server (`tests/fixtures`). `tests/live.rs` drives
 every view against a running server with demo data and is skipped unless `LOGSURE_URL` and `LOGSURE_TOKEN` are set;
 it changes data (resolves a request, adds a note, invites a signup), so point it at a throwaway server only.
+
+## Releasing
+
+Bump `version` in `Cargo.toml`, tag the commit (`git tag -a v0.2.0 -m v0.2.0`) and push the tag, then point
+`Formula/logsure.rb` at it: its `tag` and its `revision` (`git rev-list -n1 v0.2.0`).
 
 ## License
 
