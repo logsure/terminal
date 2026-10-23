@@ -1,6 +1,6 @@
 [package]
 name = "logsure"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "A terminal console for LogSure: analytics, the inbox and the waitlists from the keyboard."
 license = "MPL-2.0"
