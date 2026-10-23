@@ -13,6 +13,7 @@ use crate::api::{
 use crate::command::{self, Command, TICKET_STATUSES};
 use crate::config::Config;
 use crate::fmt;
+use crate::range::{self, Window};
 use crate::secret;
 
 /// How often the view on screen asks the server again.
@@ -131,6 +132,11 @@ impl App {
         app
     }
 
+    /// The window, worked out for today: `14d` moves along as days pass.
+    pub fn window(&self) -> Window {
+        range::parse(&self.range, range::today()).unwrap_or(Window::Preset("7d"))
+    }
+
     pub fn top(&self) -> &View {
         self.stack.last().expect("there is always a view")
     }
@@ -172,7 +178,7 @@ impl App {
 
     /// Asks the server again for the view on top.
     pub fn load(&mut self) {
-        let range = self.range.clone();
+        let range = self.window();
         let view = self.top_mut();
         let id = view.id;
         type Job = Box<dyn FnOnce(&Client) -> api::Result<Payload> + Send>;
@@ -344,7 +350,7 @@ impl App {
             }
             Command::Range(key) => {
                 self.range = key;
-                self.say(format!("range: {}", fmt::range_label(&self.range)));
+                self.say(format!("range: {}", self.window().label()));
                 self.load();
             }
             Command::Ctx(None) => match Config::load() {
@@ -413,7 +419,8 @@ impl App {
 
     fn all_rows(&self, v: &View) -> Option<Vec<ListRow>> {
         let now = fmt::now_ms();
-        let since = fmt::window_start(&self.range, now).unwrap_or(i64::MIN);
+        let (since, until) = self.window().bounds(now);
+        let within = |at: i64| at >= since && at < until;
         let row = |key: String, cells: Vec<String>, search: String| ListRow { key, cells, search };
         Some(match &v.kind {
             Kind::Apps(data) => data
@@ -470,7 +477,7 @@ impl App {
             Kind::Inbox { data, .. } => data
                 .iter()
                 .flat_map(|p| &p.items)
-                .filter(|t| t.created_at >= since)
+                .filter(|t| within(t.created_at))
                 .map(|t| {
                     let subject = t.subject.clone().filter(|s| !s.is_empty()).unwrap_or_else(|| t.preview.clone());
                     let from = t.name.clone().or_else(|| t.email.clone()).unwrap_or_default();
@@ -496,7 +503,7 @@ impl App {
             Kind::Waitlist { data, .. } => data
                 .iter()
                 .flat_map(|w| &w.items)
-                .filter(|s| s.created_at >= since)
+                .filter(|s| within(s.created_at))
                 .map(|s| {
                     row(
                         s.id.to_string(),

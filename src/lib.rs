@@ -5,5 +5,6 @@ pub mod cli;
 pub mod command;
 pub mod config;
 pub mod fmt;
+pub mod range;
 pub mod secret;
 pub mod tui;

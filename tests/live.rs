@@ -90,6 +90,16 @@ fn every_view_against_a_live_server() {
     let s = show(":range 7d", &app);
     assert!(s.contains("Last 7 days"));
 
+    command(&mut app, "range 2 w");
+    let s = show(":range 2 w", &app);
+    assert!(s.contains("Last 2 weeks") && s.contains("Top pages"));
+
+    command(&mut app, "range 2026-09-01..2026-09-15");
+    let s = show(":range 2026-09-01..2026-09-15", &app);
+    assert!(s.contains("2026-09-01 – 2026-09-15"));
+
+    command(&mut app, "range 7d");
+
     key(&mut app, KeyCode::Char('e'));
     settle(&mut app);
     let s = show("e: events", &app);
@@ -154,7 +164,11 @@ fn every_view_against_a_live_server() {
     let s = show(":nope", &app);
     assert!(s.contains("unknown command"));
 
-    key(&mut app, KeyCode::Char('q'));
-    key(&mut app, KeyCode::Char('q'));
+    // q walks back one view at a time and quits from the first.
+    let depth = app.stack.len();
+    for _ in 0..depth {
+        assert!(!app.quit, "quit before reaching the first view");
+        key(&mut app, KeyCode::Char('q'));
+    }
     assert!(app.quit, "q from the first view quits");
 }

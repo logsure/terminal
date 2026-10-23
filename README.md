@@ -76,10 +76,24 @@ file.
 | `:events [app]` | Custom events with visitors, counts, conversion and value; Enter shows one event's properties |
 | `:inbox [kind] [status]` | Feedback, bug reports and messages, e.g. `:inbox bug open` |
 | `:waitlist [list] [status]` | Signups, with every list's counts, e.g. `:waitlist beta waiting` |
-| `:range <window>` | `30m` `1h` `today` `24h` `7d` `30d` `90d` `12mo` `all`, for every view |
+| `:range <window>` | The time window for every view (see below) |
 | `:ctx [name]` | List the servers, or switch to one |
 | `:refresh` | Ask the server again; views also refresh every 30 seconds |
 | `:q` | Quit |
+
+`:range` (and `--range` on the subcommands) takes any window:
+
+| Window | Examples |
+|---|---|
+| The server's presets | `30m` `1h` `today` `24h` `7d` `30d` `90d` `12mo` `all` |
+| A length back from today | `14d` `6w` `3mo` `2y` (also `2 weeks`, `6 months`) |
+| A named stretch | `yesterday` `thisweek` `lastweek` `thismonth` `lastmonth` `thisyear` `lastyear` |
+| A day, a month or a year | `2026-09-15` `2026-09` `2025` |
+| A span | `2026-09-01..2026-09-15` `2026-06..2026-08` `2026-09..` (up to today) |
+
+Days are UTC, as the server keeps them; weeks start on Monday. A relative window such as `14d` keeps meaning the
+last 14 days while the console stays open. `range = "lastmonth"` in the configuration sets the window views open
+with.
 
 The inbox and the waitlist are not windowed by the server, so `:range` shows the requests and signups that arrived
 within the window there (`:range all` shows everything).
@@ -107,6 +121,7 @@ Times are shown in UTC, as the server keeps them.
 
 ```bash
 logsure apps --range 30d                  # every app
+logsure apps --range lastmonth            # any window :range takes
 logsure app shop                          # one app's totals, pages, sources, countries
 logsure events shop                       # its custom events
 logsure events shop signup                # one event's properties

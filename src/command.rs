@@ -1,9 +1,7 @@
 //! The `:` commands typed in the full-screen app.
 
 use crate::api::{SignupStatus, TicketKind};
-
-/// The time windows the API knows (`RangeKey` in the contract).
-pub const RANGES: [&str; 9] = ["30m", "1h", "today", "24h", "7d", "30d", "90d", "12mo", "all"];
+use crate::range;
 
 /// The `status` values `GET /tickets` takes, the server's default (`inbox`) first.
 pub const TICKET_STATUSES: [&str; 8] = ["inbox", "active", "all", "open", "progress", "resolved", "spam", "archived"];
@@ -80,11 +78,12 @@ pub fn parse(input: &str) -> Result<Command, String> {
             }
             Ok(Command::Waitlist { list, status })
         }
-        "range" => match args.as_slice() {
-            [key] if RANGES.contains(key) => Ok(Command::Range(key.to_string())),
-            [key] => Err(format!("{key:?} is not a range: {}", RANGES.join(", "))),
-            _ => Err(format!(":range needs one of {}", RANGES.join(", "))),
-        },
+        "range" if args.is_empty() => Err(format!(":range needs a window: {}", range::SYNTAX)),
+        // Words are joined, so `:range last month` and `:range 2026-09-01 .. 2026-09-15` work too.
+        "range" => {
+            let spec = args.concat();
+            range::parse(&spec, range::today()).map(|_| Command::Range(spec))
+        }
         "ctx" => at_most(1).map(|_| Command::Ctx(args.first().map(|s| s.to_string()))),
         "refresh" | "r" => at_most(0).map(|_| Command::Refresh),
         "help" | "h" | "?" => Ok(Command::Help),

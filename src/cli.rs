@@ -7,9 +7,10 @@ use clap::{Args, Parser, Subcommand};
 use serde_json::Value;
 
 use crate::api::{Client, SignupStatus, TicketKind, TicketQuery, WaitlistQuery, decode, encode};
-use crate::command::{RANGES, TICKET_STATUSES};
+use crate::command::TICKET_STATUSES;
 use crate::config::{self, Config};
 use crate::fmt;
+use crate::range::{self, Window as Span};
 use crate::secret;
 use crate::tui::{self, app::Server};
 
@@ -93,9 +94,9 @@ enum Cmd {
 
 #[derive(Args)]
 struct Window {
-    /// The time window.
-    #[arg(long, short = 'r', value_parser = RANGES)]
-    range: Option<String>,
+    /// The time window: 7d, 30d, 12mo, all, 14d, 3mo, lastmonth, 2026-09, 2026-09-01..2026-09-15, …
+    #[arg(long, short = 'r', value_parser = parse_window)]
+    range: Option<Span>,
     /// Print the server's JSON answer as it came.
     #[arg(long)]
     json: bool,
@@ -106,8 +107,10 @@ pub fn main() -> Result<()> {
     let config = Config::load()?;
     let server = cli.server.as_deref();
     let default_range =
-        config.range.clone().filter(|r| RANGES.contains(&r.as_str())).unwrap_or_else(|| String::from("7d"));
-    let range = |w: &Window| w.range.clone().unwrap_or_else(|| default_range.clone());
+        config.range.clone().filter(|r| range::parse(r, range::today()).is_ok()).unwrap_or_else(|| String::from("7d"));
+    let range = |w: &Window| {
+        w.range.clone().unwrap_or_else(|| range::parse(&default_range, range::today()).unwrap_or(Span::Preset("7d")))
+    };
     match cli.command {
         None => {
             if !io::stdout().is_terminal() {
@@ -120,7 +123,7 @@ pub fn main() -> Result<()> {
         Some(Cmd::Ctx { name }) => ctx(config, name.as_deref()),
         Some(Cmd::Apps(w)) => {
             let c = connect(&config, server)?.client;
-            let value = c.get_value("/overview", &[("range", &range(&w))])?;
+            let value = c.get_value("/overview", &range(&w).query())?;
             if w.json {
                 return print_json(&value);
             }
@@ -145,7 +148,7 @@ pub fn main() -> Result<()> {
         }
         Some(Cmd::App { id, window }) => {
             let c = connect(&config, server)?.client;
-            let value = c.get_value(&format!("/apps/{}/dashboard", encode(&id)), &[("range", &range(&window))])?;
+            let value = c.get_value(&format!("/apps/{}/dashboard", encode(&id)), &range(&window).query())?;
             if window.json {
                 return print_json(&value);
             }
@@ -177,7 +180,7 @@ pub fn main() -> Result<()> {
         }
         Some(Cmd::Events { app, name: None, window }) => {
             let c = connect(&config, server)?.client;
-            let value = c.get_value(&format!("/apps/{}/dashboard", encode(&app)), &[("range", &range(&window))])?;
+            let value = c.get_value(&format!("/apps/{}/dashboard", encode(&app)), &range(&window).query())?;
             if window.json {
                 return print_json(&value["events"]);
             }
@@ -200,10 +203,8 @@ pub fn main() -> Result<()> {
         }
         Some(Cmd::Events { app, name: Some(name), window }) => {
             let c = connect(&config, server)?.client;
-            let value = c.get_value(
-                &format!("/apps/{}/events/{}", encode(&app), encode(&name)),
-                &[("range", &range(&window))],
-            )?;
+            let value =
+                c.get_value(&format!("/apps/{}/events/{}", encode(&app), encode(&name)), &range(&window).query())?;
             if window.json {
                 return print_json(&value);
             }
@@ -404,6 +405,10 @@ fn ctx(mut config: Config, name: Option<&str>) -> Result<()> {
         }
     }
     Ok(())
+}
+
+fn parse_window(text: &str) -> Result<Span, String> {
+    range::parse(text, range::today())
 }
 
 /// Looks the apps' names up once, for tables that only carry IDs.

@@ -11,6 +11,8 @@ use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+use crate::range::Window;
+
 /// Milliseconds since the Unix epoch.
 pub type Time = i64;
 
@@ -471,16 +473,16 @@ impl Client {
         decode(self.get_value::<&str>("/me", &[])?)
     }
 
-    pub fn overview(&self, range: &str) -> Result<Overview> {
-        decode(self.get_value("/overview", &[("range", range)])?)
+    pub fn overview(&self, window: &Window) -> Result<Overview> {
+        decode(self.get_value("/overview", &window.query())?)
     }
 
-    pub fn dashboard(&self, app: &str, range: &str) -> Result<Dashboard> {
-        decode(self.get_value(&format!("/apps/{}/dashboard", encode(app)), &[("range", range)])?)
+    pub fn dashboard(&self, app: &str, window: &Window) -> Result<Dashboard> {
+        decode(self.get_value(&format!("/apps/{}/dashboard", encode(app)), &window.query())?)
     }
 
-    pub fn event(&self, app: &str, name: &str, range: &str) -> Result<EventDetail> {
-        decode(self.get_value(&format!("/apps/{}/events/{}", encode(app), encode(name)), &[("range", range)])?)
+    pub fn event(&self, app: &str, name: &str, window: &Window) -> Result<EventDetail> {
+        decode(self.get_value(&format!("/apps/{}/events/{}", encode(app), encode(name)), &window.query())?)
     }
 
     pub fn tickets(&self, q: &TicketQuery) -> Result<Page<TicketSummary>> {

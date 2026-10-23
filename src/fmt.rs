@@ -70,55 +70,8 @@ pub fn ago(at: i64, now: i64) -> String {
 pub fn datetime(ms: i64) -> String {
     let secs = ms.div_euclid(1000);
     let (days, rest) = (secs.div_euclid(86_400), secs.rem_euclid(86_400));
-    let (y, m, d) = civil(days);
+    let (y, m, d) = crate::range::civil(days);
     format!("{y:04}-{m:02}-{d:02} {:02}:{:02}", rest / 3600, (rest % 3600) / 60)
-}
-
-/// Days since 1970-01-01 to a calendar date (Howard Hinnant's algorithm).
-fn civil(days: i64) -> (i64, u32, u32) {
-    let z = days + 719_468;
-    let era = z.div_euclid(146_097);
-    let doe = z.rem_euclid(146_097);
-    let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365;
-    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
-    let mp = (5 * doy + 2) / 153;
-    let d = (doy - (153 * mp + 2) / 5 + 1) as u32;
-    let m = if mp < 10 { mp + 3 } else { mp - 9 } as u32;
-    (yoe + era * 400 + i64::from(m <= 2), m, d)
-}
-
-/// The start of a window, for lists the server does not window itself (the inbox and the waitlist). Follows the
-/// server's rules: whole UTC days for day ranges, `None` for `all`.
-pub fn window_start(range: &str, now: i64) -> Option<i64> {
-    const MIN: i64 = 60_000;
-    const DAY: i64 = 86_400_000;
-    let midnight = now.div_euclid(DAY) * DAY;
-    match range {
-        "30m" => Some(now - 30 * MIN),
-        "1h" => Some(now - 60 * MIN),
-        "24h" => Some(now - DAY),
-        "today" => Some(midnight),
-        "7d" => Some(midnight - 6 * DAY),
-        "30d" => Some(midnight - 29 * DAY),
-        "90d" => Some(midnight - 89 * DAY),
-        "12mo" => Some(midnight - 364 * DAY),
-        _ => None,
-    }
-}
-
-/// A label for a range key, used before the server has echoed its own.
-pub fn range_label(range: &str) -> &'static str {
-    match range {
-        "30m" => "Last 30 minutes",
-        "1h" => "Last hour",
-        "today" => "Today",
-        "24h" => "Last 24 hours",
-        "7d" => "Last 7 days",
-        "30d" => "Last 30 days",
-        "90d" => "Last 90 days",
-        "12mo" => "Last 12 months",
-        _ => "All time",
-    }
 }
 
 /// One line of block characters for a series.
@@ -168,8 +121,6 @@ mod tests {
         assert_eq!(duration(Some(138_916.7)), "2m 19s");
         assert_eq!(ago(0, 90 * 60_000), "1h");
         assert_eq!(datetime(1_792_195_200_000), "2026-10-17 00:00");
-        assert_eq!(window_start("7d", 1_792_794_895_417), Some(1_792_195_200_000));
-        assert_eq!(window_start("all", 1), None);
     }
 
     #[test]

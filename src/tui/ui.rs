@@ -89,7 +89,7 @@ fn draw_title(frame: &mut Frame, area: Rect, app: &App) {
     ];
     let mut right = Vec::new();
     if view.uses_range() {
-        right.push(fmt::range_label(&app.range).to_string());
+        right.push(app.window().label());
     }
     if view.loading {
         right.push(String::from("loading…"));
@@ -422,7 +422,8 @@ pub const HELP: &[(&str, &str)] = &[
     (":events [app]", "custom events with counts and conversion"),
     (":inbox [kind] [status]", "feedback, bug reports and messages"),
     (":waitlist [list] [status]", "waitlist signups"),
-    (":range <window>", "30m 1h today 24h 7d 30d 90d 12mo all, for every view"),
+    (":range <window>", "7d 30d 12mo all · 14d 6w 3mo 2y · yesterday lastmonth thisyear"),
+    ("", "2026-09 · 2026-09-15 · 2026-09-01..2026-09-15 · 2026-06.. — for every view"),
     (":ctx [name]", "list the servers, or switch to one"),
     (":refresh  Ctrl-R", "ask the server again (views refresh every 30 s)"),
     (":q  Ctrl-C", "quit"),

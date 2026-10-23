@@ -42,8 +42,11 @@ fn ranges() {
     for key in ["30m", "1h", "today", "24h", "7d", "30d", "90d", "12mo", "all"] {
         assert_eq!(parse(&format!(":range {key}")), Ok(Command::Range(key.to_string())));
     }
-    assert!(parse(":range 8d").unwrap_err().contains("not a range"));
-    assert!(parse(":range").is_err());
+    assert_eq!(parse(":range 14d"), Ok(Command::Range(String::from("14d"))));
+    assert_eq!(parse(":range last month"), Ok(Command::Range(String::from("lastmonth"))));
+    assert_eq!(parse(":range 2026-09-01 .. 2026-09-15"), Ok(Command::Range(String::from("2026-09-01..2026-09-15"))));
+    assert!(parse(":range 8x").unwrap_err().contains("not a window"));
+    assert!(parse(":range").unwrap_err().contains("needs a window"));
 }
 
 #[test]
