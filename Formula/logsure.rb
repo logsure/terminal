@@ -2,8 +2,8 @@ class Logsure < Formula
   desc "Terminal console for LogSure: analytics, the inbox and the waitlists"
   homepage "https://github.com/logsure/terminal"
   url "https://github.com/logsure/terminal.git",
-      tag:      "v0.1.0",
-      revision: "1fad53938c7de277277ffef8cb71a49033a1e023"
+      tag:      "v0.2.0",
+      revision: "36985a818448846b3c768c58b69669410177e2f6"
   license "MPL-2.0"
   head "https://github.com/logsure/terminal.git", branch: "main"
 
