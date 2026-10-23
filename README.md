@@ -13,10 +13,11 @@ With [Homebrew](https://brew.sh) (macOS and Linux), from this repository's own t
 
 ```bash
 brew tap logsure/terminal https://github.com/logsure/terminal
+brew trust logsure/terminal
 brew install logsure
 ```
 
-It builds from source, so the first install takes a few minutes. `brew upgrade logsure` picks up new releases;
+Recent Homebrew versions load formulas from other taps only once you trust them, hence the second line. It builds from source, so the first install takes a few minutes. `brew upgrade logsure` picks up new releases;
 `brew install --HEAD logsure` builds the latest `main`.
 
 With Cargo (Rust 1.88 or newer):
@@ -30,16 +31,22 @@ Or from a checkout: `cargo build --release`, then copy `target/release/logsure` 
 
 ## Sign in
 
-Make a device token in the console (Settings › Mobile app), then:
+In the web console, open Settings › Mobile app (two-factor sign-in has to be on), give the device a name such as
+"Terminal" and choose **Make a code**. The page shows a QR code and, under "No camera?", a code like
+`logsure://logsure.example.com/cc_…`. It is shown once, so copy it before leaving the page. Then:
 
 ```bash
-logsure login https://logsure.example.com
+logsure login
 ```
 
-The token (`cc_…`) is asked for, so it stays out of your shell's history; `--token cc_…` passes it directly, and
-it can be piped in too. It is checked against the server and kept in the OS keychain (Keychain on macOS, Credential
-Manager on Windows, the Secret Service on Linux), never in a file. `--name work` gives the server a short name;
-the default is its host. Signing in through the browser (OAuth) comes later.
+and paste the code when asked. The code holds the server's address and the device token, so nothing else is
+needed. `logsure login https://logsure.example.com` with just the token (`cc_…`) works too, and either can be piped
+in or passed with `--token`, though typing it on the command line leaves it in your shell's history.
+
+The token is checked against the server and kept in the OS keychain (Keychain on macOS, Credential Manager on
+Windows, the Secret Service on Linux), never in a file. `--name work` gives the server a short name; the default is
+its host. To sign a device out, remove it under Settings › Mobile app, or run `logsure logout`. Signing in through
+the browser (OAuth) comes later.
 
 The servers live in `~/.config/logsure/config.toml` (or `$XDG_CONFIG_HOME/logsure/config.toml`):
 

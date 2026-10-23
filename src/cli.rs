@@ -25,11 +25,12 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 enum Cmd {
-    /// Sign in to a server with a device token made in the console (Settings › Mobile app).
+    /// Sign in with the code the console shows in Settings › Mobile app (`logsure://…`), or an address and a token.
     Login {
-        /// The server's address, e.g. https://logsure.example.com
-        url: String,
-        /// The device token (`cc_…`). Asked for when left out, so it stays out of the shell's history.
+        /// The server's address, e.g. https://logsure.example.com, or the console's code. Asked for when left out.
+        url: Option<String>,
+        /// The device token (`cc_…`) or the console's code. Asked for when left out, so it stays out of the shell's
+        /// history.
         #[arg(long)]
         token: Option<String>,
         /// A short name for the server; default its host.
@@ -114,7 +115,7 @@ pub fn main() -> Result<()> {
             }
             tui::run(connect(&config, server)?, default_range.clone())
         }
-        Some(Cmd::Login { url, token, name }) => login(config, &url, token, name),
+        Some(Cmd::Login { url, token, name }) => login(config, url, token, name),
         Some(Cmd::Logout { name }) => logout(config, name.as_deref().or(server)),
         Some(Cmd::Ctx { name }) => ctx(config, name.as_deref()),
         Some(Cmd::Apps(w)) => {
@@ -324,17 +325,38 @@ fn connect(config: &Config, name: Option<&str>) -> Result<Server> {
     Ok(Server { name, client: Client::new(&server.url, &token) })
 }
 
-fn login(mut config: Config, url: &str, token: Option<String>, name: Option<String>) -> Result<()> {
-    let url = config::normalize_url(url)?;
-    let token = match token {
-        Some(t) => t,
-        None if io::stdin().is_terminal() => rpassword::prompt_password("Device token (cc_…): ")?,
-        None => {
-            let mut line = String::new();
-            io::stdin().lock().read_line(&mut line)?;
-            line
+fn login(mut config: Config, url: Option<String>, token: Option<String>, name: Option<String>) -> Result<()> {
+    let read = |prompt: &str| -> Result<String> {
+        if io::stdin().is_terminal() {
+            return Ok(rpassword::prompt_password(prompt)?);
+        }
+        let mut line = String::new();
+        io::stdin().lock().read_line(&mut line)?;
+        Ok(line)
+    };
+    // The console's code carries both the address and the token; an address given apart wins.
+    let (url, token) = match (url, token) {
+        (Some(url), token) if secret::parse_code(&url).is_some() => {
+            let (url, code_token) = secret::parse_code(&url).unwrap_or_default();
+            (url, token.unwrap_or(code_token))
+        }
+        (Some(url), Some(token)) => (url, token),
+        (Some(url), None) => (url, read("Device token or code (cc_… or logsure://…): ")?),
+        (None, token) => {
+            let input = match token {
+                Some(t) => t,
+                None => read("Code from Settings › Mobile app (logsure://…): ")?,
+            };
+            match secret::parse_code(&input) {
+                Some(pair) => pair,
+                None => {
+                    bail!("that is not the console's code (logsure://…); or run `logsure login <url>` with a token")
+                }
+            }
         }
     };
+    let url = config::normalize_url(&url)?;
+    let token = secret::parse_code(&token).map_or(token, |(_, t)| t);
     let token = token.trim().to_string();
     if !secret::looks_like_token(&token) {
         bail!("that is not a device token: they start with cc_ (make one in the console, Settings › Mobile app)");
