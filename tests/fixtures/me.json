@@ -1,0 +1,114 @@
+{
+  "device": {
+    "id": "d_term0001",
+    "name": "terminal"
+  },
+  "user": null,
+  "name": null,
+  "apps": [
+    {
+      "id": "notes",
+      "name": "Notes",
+      "domains": [
+        "notes.example.com"
+      ],
+      "icon": null,
+      "segments": [],
+      "defaultSegment": null
+    },
+    {
+      "id": "ledger",
+      "name": "Ledger",
+      "domains": [
+        "ledger.example.com"
+      ],
+      "icon": "/api/v1/icons/app?v=1792794887736",
+      "segments": [],
+      "defaultSegment": null
+    },
+    {
+      "id": "shop",
+      "name": "Shop",
+      "domains": [
+        "shop.example.com",
+        "www.shop.example.com"
+      ],
+      "icon": "/api/v1/icons/app?v=1792794888121",
+      "segments": [],
+      "defaultSegment": null
+    }
+  ],
+  "notifications": {
+    "count": 0,
+    "seenAt": 1792794882258,
+    "items": [
+      {
+        "type": "signups",
+        "appId": "notes",
+        "list": "early-access",
+        "n": 1,
+        "at": 1792791068548
+      },
+      {
+        "type": "signups",
+        "appId": "notes",
+        "list": "early-access",
+        "n": 3,
+        "at": 1792781005401
+      },
+      {
+        "type": "signups",
+        "appId": "notes",
+        "list": "early-access",
+        "n": 1,
+        "at": 1792778276686
+      },
+      {
+        "type": "signups",
+        "appId": "shop",
+        "list": "beta",
+        "n": 2,
+        "at": 1792773375744
+      }
+    ]
+  },
+  "counts": {
+    "open": 14,
+    "progress": 8,
+    "resolved": 15,
+    "spam": 3,
+    "archived": 0,
+    "total": 40,
+    "byApp": {
+      "notes": {
+        "open": 5,
+        "progress": 2,
+        "resolved": 5,
+        "spam": 0,
+        "archived": 0,
+        "total": 12
+      },
+      "ledger": {
+        "open": 3,
+        "progress": 2,
+        "resolved": 4,
+        "spam": 1,
+        "archived": 0,
+        "total": 10
+      },
+      "shop": {
+        "open": 6,
+        "progress": 4,
+        "resolved": 6,
+        "spam": 2,
+        "archived": 0,
+        "total": 18
+      }
+    },
+    "byKind": {
+      "bug": 7,
+      "feedback": 10,
+      "message": 5
+    }
+  }
+}

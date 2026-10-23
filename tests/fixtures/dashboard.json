@@ -1,0 +1,380 @@
+{
+  "app": {
+    "id": "shop",
+    "name": "Shop",
+    "domains": [
+      "shop.example.com",
+      "www.shop.example.com"
+    ],
+    "icon": "/api/v1/icons/app?v=1792794888121",
+    "segments": [],
+    "defaultSegment": null
+  },
+  "segment": "all",
+  "filters": {},
+  "range": {
+    "key": "30d",
+    "label": "Last 30 days",
+    "from": 1790208000000,
+    "to": 1792794895467,
+    "bucket": "day"
+  },
+  "summary": {
+    "visitors": 8705,
+    "visits": 9630,
+    "pageviews": 23471,
+    "events": 1546,
+    "viewsPerVisit": 2.4372793354101767,
+    "bounceRate": 0.3574247144340602,
+    "duration": 138916.70685358255,
+    "prev": null
+  },
+  "series": [
+    {
+      "t": 1790208000000,
+      "visitors": 228,
+      "pageviews": 569
+    },
+    {
+      "t": 1790294400000,
+      "visitors": 291,
+      "pageviews": 815
+    },
+    {
+      "t": 1790380800000,
+      "visitors": 168,
+      "pageviews": 461
+    },
+    {
+      "t": 1790467200000,
+      "visitors": 190,
+      "pageviews": 549
+    },
+    {
+      "t": 1790553600000,
+      "visitors": 235,
+      "pageviews": 660
+    },
+    {
+      "t": 1790640000000,
+      "visitors": 289,
+      "pageviews": 771
+    },
+    {
+      "t": 1790726400000,
+      "visitors": 237,
+      "pageviews": 623
+    },
+    {
+      "t": 1790812800000,
+      "visitors": 260,
+      "pageviews": 720
+    },
+    {
+      "t": 1790899200000,
+      "visitors": 235,
+      "pageviews": 607
+    },
+    {
+      "t": 1790985600000,
+      "visitors": 214,
+      "pageviews": 637
+    },
+    {
+      "t": 1791072000000,
+      "visitors": 243,
+      "pageviews": 614
+    },
+    {
+      "t": 1791158400000,
+      "visitors": 328,
+      "pageviews": 865
+    },
+    {
+      "t": 1791244800000,
+      "visitors": 314,
+      "pageviews": 847
+    },
+    {
+      "t": 1791331200000,
+      "visitors": 343,
+      "pageviews": 946
+    },
+    {
+      "t": 1791417600000,
+      "visitors": 342,
+      "pageviews": 947
+    },
+    {
+      "t": 1791504000000,
+      "visitors": 301,
+      "pageviews": 735
+    },
+    {
+      "t": 1791590400000,
+      "visitors": 226,
+      "pageviews": 628
+    },
+    {
+      "t": 1791676800000,
+      "visitors": 198,
+      "pageviews": 549
+    },
+    {
+      "t": 1791763200000,
+      "visitors": 381,
+      "pageviews": 1011
+    },
+    {
+      "t": 1791849600000,
+      "visitors": 373,
+      "pageviews": 993
+    },
+    {
+      "t": 1791936000000,
+      "visitors": 414,
+      "pageviews": 1070
+    },
+    {
+      "t": 1792022400000,
+      "visitors": 326,
+      "pageviews": 923
+    },
+    {
+      "t": 1792108800000,
+      "visitors": 286,
+      "pageviews": 750
+    },
+    {
+      "t": 1792195200000,
+      "visitors": 239,
+      "pageviews": 637
+    },
+    {
+      "t": 1792281600000,
+      "visitors": 264,
+      "pageviews": 771
+    },
+    {
+      "t": 1792368000000,
+      "visitors": 415,
+      "pageviews": 1144
+    },
+    {
+      "t": 1792454400000,
+      "visitors": 389,
+      "pageviews": 1016
+    },
+    {
+      "t": 1792540800000,
+      "visitors": 349,
+      "pageviews": 976
+    },
+    {
+      "t": 1792627200000,
+      "visitors": 312,
+      "pageviews": 814
+    },
+    {
+      "t": 1792713600000,
+      "visitors": 315,
+      "pageviews": 823
+    }
+  ],
+  "pages": [
+    {
+      "value": "/",
+      "visitors": 4845,
+      "count": 7205
+    },
+    {
+      "value": "/pricing",
+      "visitors": 2365,
+      "count": 2850
+    },
+    {
+      "value": "/features",
+      "visitors": 2052,
+      "count": 2334
+    },
+    {
+      "value": "/download",
+      "visitors": 1892,
+      "count": 2156
+    },
+    {
+      "value": "/docs",
+      "visitors": 1384,
+      "count": 1534
+    }
+  ],
+  "sources": [
+    {
+      "value": null,
+      "visitors": 3403,
+      "count": 3526
+    },
+    {
+      "value": "google.com",
+      "visitors": 2996,
+      "count": 3103
+    },
+    {
+      "value": "duckduckgo.com",
+      "visitors": 581,
+      "count": 584
+    },
+    {
+      "value": "news.ycombinator.com",
+      "visitors": 428,
+      "count": 432
+    },
+    {
+      "value": "newsletter",
+      "visitors": 417,
+      "count": 417
+    }
+  ],
+  "countries": [
+    {
+      "value": "US",
+      "visitors": 2544,
+      "count": 2806
+    },
+    {
+      "value": "DE",
+      "visitors": 1214,
+      "count": 1336
+    },
+    {
+      "value": "GB",
+      "visitors": 853,
+      "count": 956
+    },
+    {
+      "value": "FR",
+      "visitors": 588,
+      "count": 649
+    },
+    {
+      "value": "NL",
+      "visitors": 514,
+      "count": 562
+    }
+  ],
+  "devices": [
+    {
+      "value": "desktop",
+      "visitors": 5714,
+      "count": 6336
+    },
+    {
+      "value": "mobile",
+      "visitors": 2753,
+      "count": 3032
+    },
+    {
+      "value": "tablet",
+      "visitors": 238,
+      "count": 262
+    }
+  ],
+  "live": {
+    "visitors": 1,
+    "pages": [
+      {
+        "value": "/",
+        "visitors": 1
+      }
+    ]
+  },
+  "events": [
+    {
+      "name": "download",
+      "visitors": 881,
+      "count": 949,
+      "value": null,
+      "conversion": 0.10120620333141872
+    },
+    {
+      "name": "signup",
+      "visitors": 316,
+      "count": 327,
+      "value": 889.11,
+      "conversion": 0.03630097645031591
+    },
+    {
+      "name": "export",
+      "visitors": 261,
+      "count": 270,
+      "value": null,
+      "conversion": 0.029982768523836877
+    }
+  ],
+  "chartEvents": [],
+  "languages": [
+    {
+      "value": "en",
+      "visitors": 4588,
+      "count": 5082
+    },
+    {
+      "value": "de",
+      "visitors": 1214,
+      "count": 1336
+    },
+    {
+      "value": "fr",
+      "visitors": 588,
+      "count": 649
+    }
+  ],
+  "sites": [
+    {
+      "value": "shop.example.com",
+      "visitors": 8705,
+      "count": 9630
+    }
+  ],
+  "ratings": {
+    "count": 3,
+    "average": 3,
+    "distribution": [
+      0,
+      1,
+      1,
+      1,
+      0
+    ]
+  },
+  "recent": [
+    {
+      "id": "t_0mvcq8ffh87fb1500",
+      "appId": "shop",
+      "kind": "feedback",
+      "status": "open",
+      "subject": "Checkout is slow on my old laptop.",
+      "preview": "Checkout is slow on my old laptop.",
+      "email": null,
+      "name": null,
+      "rating": 2,
+      "category": null,
+      "createdAt": 1792261519901,
+      "updatedAt": 1792261519901
+    },
+    {
+      "id": "t_0mv86ltm887580dd8",
+      "appId": "shop",
+      "kind": "feedback",
+      "status": "open",
+      "subject": "Pricing page is confusing: is shipping included?",
+      "preview": "Pricing page is confusing: is shipping included?",
+      "email": null,
+      "name": null,
+      "rating": 3,
+      "category": "pricing",
+      "createdAt": 1791986687792,
+      "updatedAt": 1791986687792
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "total": 150,
+  "items": [
+    {
+      "id": 150,
+      "appId": "notes",
+      "list": "early-access",
+      "email": "radia.patel34@example.net",
+      "name": null,
+      "status": "waiting",
+      "source": "t.me",
+      "country": "DK",
+      "lang": "da",
+      "createdAt": 1792791068548,
+      "updatedAt": 1792791068548
+    },
+    {
+      "id": 149,
+      "appId": "notes",
+      "list": "early-access",
+      "email": "leslie.tanaka@example.org",
+      "name": "Leslie Tanaka",
+      "status": "waiting",
+      "source": "instagram",
+      "country": "IR",
+      "lang": "fa",
+      "createdAt": 1792781005401,
+      "updatedAt": 1792781005401
+    },
+    {
+      "id": 148,
+      "appId": "notes",
+      "list": "early-access",
+      "email": "barbara.patel@example.com",
+      "name": "Barbara Patel",
+      "status": "waiting",
+      "source": "instagram",
+      "country": "SE",
+      "lang": "sv",
+      "createdAt": 1792780548866,
+      "updatedAt": 1792780548866
+    },
+    {
+      "id": 147,
+      "appId": "notes",
+      "list": "early-access",
+      "email": "kian.kay@example.com",
+      "name": "Kian Kay",
+      "status": "waiting",
+      "source": "instagram",
+      "country": "DK",
+      "lang": "da",
+      "createdAt": 1792780214732,
+      "updatedAt": 1792780214732
+    }
+  ],
+  "lists": [
+    {
+      "appId": "notes",
+      "list": "early-access",
+      "total": 58,
+      "waiting": 58,
+      "invited": 0,
+      "joined": 0
+    },
+    {
+      "appId": "shop",
+      "list": "beta",
+      "total": 92,
+      "waiting": 62,
+      "invited": 20,
+      "joined": 10
+    }
+  ],
+  "counts": {
+    "total": 150,
+    "byApp": {
+      "notes": {
+        "total": 58,
+        "waiting": 58,
+        "invited": 0,
+        "joined": 0
+      },
+      "shop": {
+        "total": 92,
+        "waiting": 62,
+        "invited": 20,
+        "joined": 10
+      }
+    }
+  }
+}

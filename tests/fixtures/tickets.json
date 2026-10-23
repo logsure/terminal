@@ -1,0 +1,65 @@
+{
+  "total": 37,
+  "items": [
+    {
+      "id": "t_0mvktr1we39ea6a84",
+      "appId": "shop",
+      "kind": "bug",
+      "status": "open",
+      "subject": "Search ignores the size filter",
+      "preview": "Results still show every size.",
+      "email": "ada.lovelace@example.com",
+      "name": "Ada Lovelace",
+      "rating": null,
+      "category": null,
+      "createdAt": 1792751157086,
+      "updatedAt": 1792751157086,
+      "files": 0
+    },
+    {
+      "id": "t_0mvkvyjktb63af7f4",
+      "appId": "notes",
+      "kind": "feedback",
+      "status": "open",
+      "subject": "Could the photos be larger?",
+      "preview": "Could the photos be larger?",
+      "email": "grace.hopper@example.com",
+      "name": "Grace Hopper",
+      "rating": 4,
+      "category": "photos",
+      "createdAt": 1792754865821,
+      "updatedAt": 1792754865821,
+      "files": 0
+    },
+    {
+      "id": "t_0mvh9xh2o015df38f",
+      "appId": "notes",
+      "kind": "feedback",
+      "status": "open",
+      "subject": "Beautiful packaging.",
+      "preview": "Beautiful packaging.",
+      "email": null,
+      "name": null,
+      "rating": 5,
+      "category": null,
+      "createdAt": 1792536465840,
+      "updatedAt": 1792536465840,
+      "files": 0
+    },
+    {
+      "id": "t_0mvjerjmxb5645874",
+      "appId": "shop",
+      "kind": "message",
+      "status": "progress",
+      "subject": "Can I change the delivery address after ordering?",
+      "preview": "Can I change the delivery address after ordering?",
+      "email": "barbara.liskov@example.com",
+      "name": "Barbara Liskov",
+      "rating": null,
+      "category": null,
+      "createdAt": 1792665519657,
+      "updatedAt": 1792689335456,
+      "files": 0
+    }
+  ]
+}

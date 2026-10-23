@@ -1,0 +1,57 @@
+{
+  "id": "t_0mujwwwha20bc454c",
+  "appId": "shop",
+  "kind": "bug",
+  "status": "progress",
+  "subject": "Discount code drops off the second item",
+  "body": "With two items in the cart, the discount only applies to the first one.",
+  "data": {
+    "steps": "1. Add two items to the cart\n2. Apply the code SPRING10\n3. Open the cart again",
+    "expected": "Both items keep the discount",
+    "version": "2.4.1"
+  },
+  "meta": {
+    "url": "https://shop.example.com/",
+    "browser": "Safari",
+    "os": "iOS",
+    "device": "mobile",
+    "country": "ES",
+    "lang": "es",
+    "props": null,
+    "host": "shop.example.com"
+  },
+  "email": "ada.lovelace@example.com",
+  "name": "Ada Lovelace",
+  "rating": null,
+  "category": null,
+  "createdAt": 1790519220334,
+  "updatedAt": 1791441268743,
+  "notes": [
+    {
+      "id": 24,
+      "ts": 1790858939247,
+      "kind": "note",
+      "body": "Reproduced with a test order."
+    },
+    {
+      "id": 25,
+      "ts": 1790882147825,
+      "kind": "status",
+      "body": "Open → In progress"
+    },
+    {
+      "id": 30,
+      "ts": 1791441268743,
+      "kind": "note",
+      "body": "The code is applied per line; fix on a branch."
+    }
+  ],
+  "attachments": [
+    {
+      "id": "f_0mujwwwhadbd679ce",
+      "name": "cart.png",
+      "type": "image/png",
+      "size": 581
+    }
+  ]
+}
