@@ -1,6 +1,7 @@
 //! The full-screen app.
 
 pub mod app;
+pub mod banner;
 pub mod ui;
 
 use std::time::{Duration, Instant};

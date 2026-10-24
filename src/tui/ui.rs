@@ -7,6 +7,7 @@ use ratatui::text::{Line, Span, Text};
 use ratatui::widgets::{Block, Borders, Cell, Clear, Paragraph, Row, Sparkline, Table, TableState, Wrap};
 
 use super::app::{App, Kind, Mode, View};
+use super::banner;
 use crate::api::{Dashboard, Row as ApiRow, Ticket};
 use crate::fmt;
 
@@ -25,8 +26,14 @@ fn bold() -> Style {
 }
 
 pub fn draw(frame: &mut Frame, app: &App) {
+    let mut screen = frame.area();
+    if banner::fits(screen) {
+        let [top, rest] = Layout::vertical([Constraint::Length(banner::HEIGHT), Constraint::Min(1)]).areas(screen);
+        banner::draw(frame, top, &app.server.name, app.server.client.base());
+        screen = rest;
+    }
     let [title, body, bottom] =
-        Layout::vertical([Constraint::Length(1), Constraint::Min(1), Constraint::Length(1)]).areas(frame.area());
+        Layout::vertical([Constraint::Length(1), Constraint::Min(1), Constraint::Length(1)]).areas(screen);
     draw_title(frame, title, app);
     let view = app.top();
     match &view.kind {

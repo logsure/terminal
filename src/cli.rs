@@ -3,7 +3,7 @@
 use std::io::{self, BufRead, IsTerminal, Write};
 
 use anyhow::{Context, Result, bail};
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, CommandFactory, FromArgMatches, Parser, Subcommand};
 use serde_json::Value;
 
 use crate::api::{Client, SignupStatus, TicketKind, TicketQuery, WaitlistQuery, decode, encode};
@@ -103,7 +103,8 @@ struct Window {
 }
 
 pub fn main() -> Result<()> {
-    let cli = Cli::parse();
+    let help = Cli::command().before_help(crate::tui::banner::rows().join("\n"));
+    let cli = Cli::from_arg_matches(&help.get_matches()).unwrap_or_else(|e| e.exit());
     let config = Config::load()?;
     let server = cli.server.as_deref();
     let default_range =

@@ -69,6 +69,9 @@ file.
 
 ## The full-screen console
 
+A LOGSURE banner in block letters runs across the top when the terminal has at least 32 rows. In smaller
+windows the console keeps a one-line title, so the lists keep their room.
+
 | Command | View |
 |---|---|
 | `:apps` | Every app: visitors, pageviews, change against the previous period, visitors now, and a trend |
