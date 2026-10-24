@@ -582,11 +582,14 @@ impl App {
             KeyCode::Char('/') => self.mode = Mode::Filter(self.top().filter.clone()),
             KeyCode::Char('?') => self.help = true,
             KeyCode::Char('q') => self.back(),
+            // Esc first clears a filter, then goes back like q, but never quits.
             KeyCode::Esc => {
                 let v = self.top_mut();
                 if !v.filter.is_empty() {
                     v.filter.clear();
                     v.selected = 0;
+                } else if self.stack.len() > 1 {
+                    self.back();
                 }
             }
             KeyCode::Up => self.move_by(-1),
@@ -823,5 +826,107 @@ impl View {
     /// Whether the time window applies to this view.
     pub fn uses_range(&self) -> bool {
         !matches!(self.kind, Kind::Ticket { .. } | Kind::Servers(_))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// An app whose server is never reached: answers fail and are ignored by these tests.
+    fn app() -> App {
+        App::new(
+            Server { name: String::from("test"), client: Client::new("http://127.0.0.1:9", "cc_test") },
+            String::from("7d"),
+        )
+    }
+
+    fn press(app: &mut App, code: KeyCode) {
+        app.key(KeyEvent::new(code, KeyModifiers::NONE));
+    }
+
+    fn depth(app: &App) -> usize {
+        app.stack.len()
+    }
+
+    #[test]
+    fn esc_goes_back_like_q() {
+        let mut app = app();
+        app.push(Kind::Inbox { query: TicketQuery::default(), data: None });
+        app.push(Kind::Ticket { id: String::from("t_1"), data: None });
+        press(&mut app, KeyCode::Esc);
+        assert!(matches!(app.top().kind, Kind::Inbox { .. }), "from a request back to its list");
+        press(&mut app, KeyCode::Esc);
+        assert!(matches!(app.top().kind, Kind::Apps(_)));
+        assert!(!app.quit);
+    }
+
+    #[test]
+    fn esc_never_quits_from_the_first_view() {
+        let mut app = app();
+        press(&mut app, KeyCode::Esc);
+        press(&mut app, KeyCode::Esc);
+        assert_eq!(depth(&app), 1);
+        assert!(!app.quit, "Esc on the first view does nothing");
+        press(&mut app, KeyCode::Char('q'));
+        assert!(app.quit, "q still quits from there");
+    }
+
+    #[test]
+    fn esc_closes_help_first() {
+        let mut app = app();
+        app.push(Kind::Inbox { query: TicketQuery::default(), data: None });
+        press(&mut app, KeyCode::Char('?'));
+        assert!(app.help);
+        press(&mut app, KeyCode::Esc);
+        assert!(!app.help);
+        assert_eq!(depth(&app), 2, "closing help does not also go back");
+    }
+
+    #[test]
+    fn esc_closes_the_command_line_first() {
+        let mut app = app();
+        app.push(Kind::Inbox { query: TicketQuery::default(), data: None });
+        press(&mut app, KeyCode::Char(':'));
+        press(&mut app, KeyCode::Char('a'));
+        press(&mut app, KeyCode::Esc);
+        assert_eq!(app.mode, Mode::Normal);
+        assert_eq!(depth(&app), 2);
+    }
+
+    #[test]
+    fn esc_closes_a_filter_then_goes_back() {
+        let mut app = app();
+        app.push(Kind::Inbox { query: TicketQuery::default(), data: None });
+        // Typing a filter: Esc drops it and stays.
+        press(&mut app, KeyCode::Char('/'));
+        press(&mut app, KeyCode::Char('x'));
+        press(&mut app, KeyCode::Esc);
+        assert_eq!(app.mode, Mode::Normal);
+        assert!(app.top().filter.is_empty());
+        assert_eq!(depth(&app), 2);
+        // A kept filter: the first Esc clears it, the second goes back.
+        press(&mut app, KeyCode::Char('/'));
+        press(&mut app, KeyCode::Char('x'));
+        press(&mut app, KeyCode::Enter);
+        assert_eq!(app.top().filter, "x");
+        press(&mut app, KeyCode::Esc);
+        assert!(app.top().filter.is_empty());
+        assert_eq!(depth(&app), 2);
+        press(&mut app, KeyCode::Esc);
+        assert_eq!(depth(&app), 1);
+    }
+
+    #[test]
+    fn esc_closes_the_note_box_first() {
+        let mut app = app();
+        app.push(Kind::Inbox { query: TicketQuery::default(), data: None });
+        app.push(Kind::Ticket { id: String::from("t_1"), data: None });
+        press(&mut app, KeyCode::Char('n'));
+        assert!(matches!(app.mode, Mode::Note { .. }));
+        press(&mut app, KeyCode::Char('h'));
+        press(&mut app, KeyCode::Esc);
+        assert_eq!(app.mode, Mode::Normal);
+        assert!(matches!(app.top().kind, Kind::Ticket { .. }), "the request stays open");
     }
 }

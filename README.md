@@ -104,6 +104,7 @@ within the window there (`:range all` shows everything).
 | `Enter` | Open the selected row |
 | `/` | Filter the current list as you type; `Enter` keeps it, `Esc` clears it |
 | `?` | Help |
+| `Esc` | Back, like `q`, but never quits. When help, the `:` line, a filter or a note is open, it closes that first |
 | `q` | Back; quits from the first view |
 | `Tab` | Complete a command |
 | `Ctrl-R` | Refresh |

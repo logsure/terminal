@@ -136,13 +136,13 @@ fn draw_bottom(frame: &mut Frame, area: Rect, app: &App) {
 fn hints_for(view: &View) -> &'static str {
     match view.kind {
         Kind::Apps(_) => "Enter open  : command  / filter  ? help  q quit",
-        Kind::App { .. } => "e events  / filter  : command  ? help  q back",
-        Kind::Events { .. } => "Enter properties  / filter  ? help  q back",
-        Kind::Event { .. } => "/ filter  ? help  q back",
-        Kind::Inbox { .. } => "Enter read  r resolve  n note  t kind  s status  / filter  q back",
-        Kind::Ticket { .. } => "r resolve  n note  ↑↓ scroll  q back",
-        Kind::Waitlist { .. } => "i invited  j joined  w waiting  l list  s status  / filter  q back",
-        Kind::Servers(_) => "Enter switch  q back",
+        Kind::App { .. } => "e events  / filter  : command  ? help  Esc back",
+        Kind::Events { .. } => "Enter properties  / filter  ? help  Esc back",
+        Kind::Event { .. } => "/ filter  ? help  Esc back",
+        Kind::Inbox { .. } => "Enter read  r resolve  n note  t kind  s status  / filter  Esc back",
+        Kind::Ticket { .. } => "r resolve  n note  ↑↓ scroll  Esc back",
+        Kind::Waitlist { .. } => "i invited  j joined  w waiting  l list  s status  / filter  Esc back",
+        Kind::Servers(_) => "Enter switch  Esc back",
     }
 }
 
@@ -431,6 +431,7 @@ pub const HELP: &[(&str, &str)] = &[
     ("↑ ↓ PgUp PgDn", "move"),
     ("Enter", "open the selected row"),
     ("/", "filter the current list; Esc clears it"),
+    ("Esc", "close help, a command, a filter or a note; else back"),
     ("q", "back; quits from the first view"),
     ("Tab", "complete a command"),
     ("", ""),
